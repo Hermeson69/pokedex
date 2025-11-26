@@ -9,7 +9,10 @@ export default function RootLayout() {
       />
       <Stack.Screen
         name="details"
-        options={{ title: "Detalhes", headerBackButtonDisplayMode: "minimal" }}
+        options={{
+          title: "Detalhes",
+          headerBackButtonDisplayMode: "minimal",
+        }}
       />
     </Stack>
   );
