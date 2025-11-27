@@ -59,7 +59,7 @@ export default function Index() {
   async function fechPokemons() {
     try {
       const response = await fetch(
-        "https://pokeapi.co/api/v2/pokemon/?limit=20"
+        "https://pokeapi.co/api/v2/pokemon/?limit=50"
       );
       const data = await response.json();
 
@@ -85,8 +85,7 @@ export default function Index() {
 
   const filteredPokemons = pokemons.filter(
     (pokemon) =>
-      pokemon.name.toLowerCase().includes(search.toLowerCase()) ||
-      String(pokemon.id).includes(search)
+      pokemon.name.toLowerCase().includes(search.toLowerCase()) || pokemon.id.toString().includes(search)
   );
 
   return (
@@ -179,7 +178,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 18,
-    marginTop: 8,
+    marginTop: 6,
     fontWeight: "bold",
   },
   id: {
