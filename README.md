@@ -1,50 +1,90 @@
-# Welcome to your Expo app 👋
+# Pokedex 📱
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Uma aplicação mobile desenvolvida em React Native com Expo para explorar e buscar informações sobre Pokémons. Este é um projeto de aprendizagem para praticar conceitos de desenvolvimento mobile.
 
-## Get started
+## 🎯 Objetivo
 
-1. Install dependencies
+Este projeto foi desenvolvido com o propósito de aprender e praticar:
 
-   ```bash
-   npm install
-   ```
+- React Native e Expo
+- Consumo de APIs (PokéAPI)
+- Gerenciamento de estado com hooks (useState, useEffect)
+- Navegação entre telas com Expo Router
+- Estilização e layout responsivo
+- TypeScript em aplicações mobile
 
-2. Start the app
+## 🚀 Funcionalidades
 
-   ```bash
-   npx expo start
-   ```
+- **Listagem de Pokémons**: Visualize os primeiros 50 Pokémons em uma grid 2x2
+- **Busca**: Pesquise Pokémons pelo nome ou número da Pokédex
+- **Detalhes**: Clique em um Pokémon para ver mais informações (em desenvolvimento)
+- **Cores por tipo**: Cada Pokémon é colorido de acordo com seu tipo
 
-In the output, you'll find options to open the app in a
+## 📋 Pré-requisitos
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- Node.js (v14+)
+- npm ou yarn
+- Expo CLI (opcional)
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 🔧 Instalação
 
-## Get a fresh project
-
-When you're ready, run:
+1. Clone o repositório:
 
 ```bash
-npm run reset-project
+git clone <seu-repositorio>
+cd pokedex
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2. Instale as dependências:
 
-## Learn more
+```bash
+npm install
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+## ▶️ Como executar
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+1. Inicie o servidor de desenvolvimento:
 
-## Join the community
+```bash
+npx expo start
+```
 
-Join our community of developers creating universal apps.
+2. Escolha uma opção para visualizar:
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Pressione **i** para abrir no iOS Simulator
+- Pressione **a** para abrir no Android Emulator
+- Escaneie o QR code com o [Expo Go](https://expo.dev/go) no seu dispositivo
+
+## 📁 Estrutura do Projeto
+
+```
+pokedex/
+├── app/
+│   ├── index.tsx          # Tela principal com listagem
+│   ├── details.tsx        # Tela de detalhes do Pokémon
+│   └── _layout.tsx        # Configuração de rotas
+├── assets/                # Imagens e recursos
+├── package.json           # Dependências
+├── tsconfig.json          # Configuração TypeScript
+└── README.md
+```
+
+## 🛠️ Tecnologias Utilizadas
+
+- **React Native** - Framework para apps mobile
+- **Expo** - Plataforma para desenvolvimento com React Native
+- **Expo Router** - Roteamento de tela (file-based routing)
+- **TypeScript** - Tipagem estática
+- **PokéAPI** - API pública de dados de Pokémons
+
+## 📚 API Utilizada
+
+A aplicação consome dados da [PokéAPI](https://pokeapi.co/), uma API pública gratuita com informações sobre todos os Pokémons.
+
+## 📞 Suporte
+
+Para dúvidas sobre Expo e React Native:
+
+- [Documentação Expo](https://docs.expo.dev/)
+- [React Native Docs](https://reactnative.dev/)
+- [PokéAPI Docs](https://pokeapi.co/docs/v2)
