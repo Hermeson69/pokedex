@@ -13,21 +13,9 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { Pokemon } from "../src/types/pokemonTypes";
 
-interface PokemonType {
-  types: {
-    name: string;
-    url: string;
-  };
-}
-interface Pokemon {
-  id: number;
-  name: string;
-  image: string;
-  types: PokemonType[];
-}
-
-const colorsByType = {
+const colorsByType: Record<string, string> = {
   normal: "#ABA77A",
   fire: "#EE8130",
   water: "#6390f0",
@@ -85,12 +73,13 @@ export default function Index() {
 
   const filteredPokemons = pokemons.filter(
     (pokemon) =>
-      pokemon.name.toLowerCase().includes(search.toLowerCase()) || pokemon.id.toString().includes(search)
+      pokemon.name.toLowerCase().includes(search.toLowerCase()) ||
+      pokemon.id.toString().includes(search)
   );
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView>
+      <SafeAreaView style={{ flex: 1 }}>
         <Text style={styles.title}>Pokedéx</Text>
         <Text style={styles.subTitle}>
           Busque por qualquer Pokémon pelo nome ou usando seu número na Pokédex
@@ -122,7 +111,7 @@ export default function Index() {
           renderItem={({ item }) => (
             <Pressable
               onPress={() =>
-                router.push({
+                router.navigate({
                   pathname: "/details",
                   params: { pokemon: item.name },
                 })
