@@ -59,7 +59,7 @@ export default function Index() {
           return {
             id: details.id,
             name: pokemon.name,
-            image: details.sprites.front_default,
+            image: details.sprites,
             types: details.types,
           };
         })
@@ -132,7 +132,7 @@ export default function Index() {
                 }}
               >
                 <Image
-                  source={{ uri: item.image }}
+                  source={{ uri: item.image.front_default }}
                   style={{
                     width: 120,
                     height: 120,

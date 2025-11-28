@@ -66,6 +66,6 @@ export interface Pokemon {
     held_items: PokemonHeldItem[];
     location_area_encounters: string;
     moves: PokemonMove[];
-    /* sprites: PokemonSprites[] */
+    image: PokemonSprites;
     types: PokemonType[];
 }
