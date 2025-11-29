@@ -13,6 +13,7 @@ export default function RootLayout() {
         options={{
           title: "Detalhes",
           headerBackButtonDisplayMode: "minimal",
+          presentation: "fullScreenModal",
         }}
       />
     </Stack>
