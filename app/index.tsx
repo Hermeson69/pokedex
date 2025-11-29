@@ -114,7 +114,7 @@ export default function Index() {
               onPress={() =>
                 router.navigate({
                   pathname: "/details",
-                  params: { pokemon: item.name },
+                  params: { pokemon: item.name.toLowerCase() },
                 })
               }
               style={({ pressed }) => ({
