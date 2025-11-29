@@ -14,6 +14,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Pokemon } from "../src/types/pokemonTypes";
+import PokemonCard from "@/src/components/pokemonCard";
 
 const colorsByType: Record<string, string> = {
   normal: "#ABA77A",
@@ -121,14 +122,13 @@ export default function Index() {
                 flex: 1,
               })}
             >
-              <View
+              <PokemonCard
+                type={item.types[0].type.name}
                 style={{
                   flex: 1,
                   alignItems: "center",
                   padding: 10,
                   borderRadius: 15,
-                  // @ts-ignore
-                  backgroundColor: colorsByType[item.types[0].type.name] + 70,
                 }}
               >
                 <Image
@@ -144,7 +144,7 @@ export default function Index() {
                 <Text style={styles.id}>
                   {String(item.id).padStart(3, "0")}
                 </Text>
-              </View>
+              </PokemonCard>
             </Pressable>
           )}
         />
