@@ -27,7 +27,6 @@ export default function Details() {
 
   useEffect(() => {
     if (pokemonDetail) {
-      setLastType(pokemonDetail.types[0].type.name);
       navigation.setOptions({
         headerTitle: () => (
           <View style={{ alignItems: "center", padding: 10 }}>
@@ -82,6 +81,8 @@ export default function Details() {
         image: details.sprites,
         types: details.types,
       });
+
+      setLastType(details.types[0].type.name);
     } catch (e) {
       console.log(e);
     } finally {
@@ -149,7 +150,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 25,
     borderWidth: 4,
-    borderColor: "#ccc",
+    borderColor: "#ccc"
   },
   spinnerContainer: {
     flex: 1,
