@@ -1,38 +1,61 @@
 import PokemonCard from "@/src/components/pokemonCard";
 import { Pokemon } from "@/src/types/pokemonTypes";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
-import { Image, Text, View, StyleSheet, ScrollView } from "react-native";
-
-const colorsByType: Record<string, string> = {
-  normal: "#ABA77A",
-  fire: "#EE8130",
-  water: "#6390f0",
-  electric: "#f7d02c",
-  grass: "#7ac74c",
-  ice: "#96d9d6",
-  poison: "#B33EA1",
-  ground: "#E2BF65",
-  flying: "#A98FF3",
-  bug: "#A6B91A",
-  rock: "#B6A136",
-  ghost: "#735797",
-  steel: "#B7B7CE",
-  psychic: "#F85888",
-  dark: "#705848",
-  dragon: "#6F35FC",
-  fairy: "#EC8FE6",
-  fighting: "#C22E1C",
-};
+import {
+  Image,
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  Animated,
+} from "react-native";
+import { colorsByType } from "../src/types/types";
 
 export default function Details() {
   const params = useLocalSearchParams();
+  const navigation = useNavigation();
   const [pokemonDetail, setPokemonDetail] = useState<Pokemon | null>(null);
-  const [loading, setLoading] = useState(true);
+
+  const [loading, setLoading] = useState(false);
+  const spinValue = new Animated.Value(0);
+  const [lastType, setLastType] = useState<string>("");
 
   useEffect(() => {
     fetchPokemonDetails();
   }, [params.pokemon]);
+
+  useEffect(() => {
+    if (pokemonDetail) {
+      setLastType(pokemonDetail.types[0].type.name);
+      navigation.setOptions({
+        headerTitle: () => (
+          <View style={{ alignItems: "center", padding: 10 }}>
+            <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+              {pokemonDetail.name.charAt(0).toUpperCase() +
+                pokemonDetail.name.slice(1)}
+            </Text>
+            <Text style={{ fontSize: 14, color: "gray" }}>
+              #{String(pokemonDetail.id).padStart(3, "0")}
+            </Text>
+          </View>
+        ),
+      });
+    }
+  }, [pokemonDetail]);
+
+  useEffect(() => {
+    if (loading) {
+      spinValue.setValue(0);
+      Animated.loop(
+        Animated.timing(spinValue, {
+          toValue: 1,
+          duration: 1000,
+          useNativeDriver: true,
+        })
+      ).start();
+    }
+  }, [loading]);
 
   async function fetchPokemonDetails() {
     try {
@@ -42,7 +65,7 @@ export default function Details() {
       );
       const details = await response.json();
 
-      const detailPokemon = {
+      setPokemonDetail({
         id: details.id,
         name: details.name,
         base_experience: details.base_experience,
@@ -58,9 +81,7 @@ export default function Details() {
         moves: details.moves,
         image: details.sprites,
         types: details.types,
-      };
-
-      setPokemonDetail(detailPokemon);
+      });
     } catch (e) {
       console.log(e);
     } finally {
@@ -68,43 +89,71 @@ export default function Details() {
     }
   }
 
-  if (loading) return <Text>Carregando...</Text>;
-  if (!pokemonDetail) return <Text>Pokémon não encontrado</Text>;
+  if (loading) {
+    const spin = spinValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: ["0deg", "360deg"],
+    });
+
+    return (
+      <View style={styles.spinnerContainer}>
+        <Animated.View style={{ transform: [{ rotate: spin }] }}>
+          <View
+            style={[
+              styles.spinner,
+              {
+                borderTopColor: `${colorsByType[lastType]}`,
+              },
+            ]}
+          />
+        </Animated.View>
+      </View>
+    );
+  }
 
   return (
     <ScrollView style={styles.container}>
-      <PokemonCard style={styles.card} type={pokemonDetail.types[0].type.name}>
-        <Image
-          source={{ uri: pokemonDetail.image.front_default }}
-          style={styles.image}
-        />
-        <Text style={styles.name}>
-          {pokemonDetail.name.charAt(0).toUpperCase() +
-            pokemonDetail.name.slice(1)}
-        </Text>
-        <Text style={styles.id}>
-          #{String(pokemonDetail.id).padStart(3, "0")}
-        </Text>
-        <Text style={styles.info}>Altura: {pokemonDetail.height / 10}m</Text>
-        <Text style={styles.info}>Peso: {pokemonDetail.weight / 10}kg</Text>
-        <Text style={styles.info}>
-          Experiência Base: {pokemonDetail.base_experience}
-        </Text>
-      </PokemonCard>
+      {pokemonDetail && (
+        <PokemonCard
+          style={styles.card}
+          type={pokemonDetail.types[0].type.name}
+        >
+          <Image
+            source={{ uri: pokemonDetail.image.front_default }}
+            style={styles.image}
+          />
+        </PokemonCard>
+      )}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16 },
+  container: {
+    flex: 1,
+    padding: 18,
+    paddingTop: 120,
+  },
   card: {
     alignItems: "center",
     padding: 20,
-    borderRadius: 15,
+    borderRadius: 20,
     marginVertical: 10,
   },
-  image: { width: 270, height: 270 },
+  image: { width: 300, height: 300, margin: 15 },
   name: { fontSize: 24, fontWeight: "bold", marginTop: 10 },
   id: { fontSize: 16, color: "gray", marginTop: 5, fontWeight: "500" },
   info: { fontSize: 16, marginTop: 8 },
+  spinner: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    borderWidth: 4,
+    borderColor: "#ccc",
+  },
+  spinnerContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
