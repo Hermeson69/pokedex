@@ -16,26 +16,6 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Pokemon } from "../src/types/pokemonTypes";
 import PokemonCard from "@/src/components/pokemonCard";
 
-const colorsByType: Record<string, string> = {
-  normal: "#ABA77A",
-  fire: "#EE8130",
-  water: "#6390f0",
-  electric: "#f7d02c",
-  grass: "#7ac74c",
-  ice: "#96d9d6",
-  poison: "#B33EA1",
-  ground: "#E2BF65",
-  flying: "#A98FF3",
-  bug: "#A6B91A",
-  rock: "#B6A136",
-  ghost: "#735797",
-  steel: "#B7B7CE",
-  psychic: "#F85888",
-  dark: "#705848",
-  dragon: "#6F35FC",
-  fairy: "#EC8FE6",
-  fighting: "#C22E1C",
-};
 
 export default function Index() {
   const [pokemons, setpokemons] = useState<Pokemon[]>([]);
@@ -83,12 +63,12 @@ export default function Index() {
       <SafeAreaView style={{ flex: 1 }}>
         <Text style={styles.title}>Pokedéx</Text>
         <Text style={styles.subTitle}>
-          Busque por qualquer Pokémon pelo nome ou usando seu número na Pokédex
+          Search for any Pokémon by name or using its number in the Pokédex
         </Text>
 
         <View style={styles.searchContainer}>
           <TextInput
-            placeholder="Pesquisar Pokémon..."
+            placeholder="Search Pokémon..."
             onChangeText={setSearch}
             value={search}
             style={styles.searchInput}

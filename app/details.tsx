@@ -1,129 +1,124 @@
-import PokemonCard from "@/src/components/pokemonCard";
-import { Pokemon } from "@/src/types/pokemonTypes";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import {
-  Image,
-  Text,
   View,
-  StyleSheet,
+  Text,
+  Image,
   ScrollView,
+  StyleSheet,
   Animated,
 } from "react-native";
+import PokemonCard from "@/src/components/pokemonCard";
 import { colorsByType } from "../src/types/types";
+import { usePokemon } from "@/src/hooks/usePokemon";
 
 export default function Details() {
   const params = useLocalSearchParams();
   const navigation = useNavigation();
-  const [pokemonDetail, setPokemonDetail] = useState<Pokemon | null>(null);
+  const { pokemon, loading } = usePokemon(params.pokemon as string);
+  const tabs = ["Forms", "Details", "Moves", "Stats", "Weaknesses"];
 
-  const [loading, setLoading] = useState(false);
-  const spinValue = new Animated.Value(0);
-  const [lastType, setLastType] = useState<string>("");
-
-  useEffect(() => {
-    fetchPokemonDetails();
-  }, [params.pokemon]);
+  const [activeTab, setActiveTab] = useState("Forms");
 
   useEffect(() => {
-    if (pokemonDetail) {
+    if (pokemon) {
       navigation.setOptions({
         headerTitle: () => (
           <View style={{ alignItems: "center", padding: 10 }}>
             <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-              {pokemonDetail.name.charAt(0).toUpperCase() +
-                pokemonDetail.name.slice(1)}
+              {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}
             </Text>
             <Text style={{ fontSize: 14, color: "gray" }}>
-              #{String(pokemonDetail.id).padStart(3, "0")}
+              #{String(pokemon.id).padStart(3, "0")}
             </Text>
           </View>
         ),
       });
     }
-  }, [pokemonDetail]);
-
-  useEffect(() => {
-    if (loading) {
-      spinValue.setValue(0);
-      Animated.loop(
-        Animated.timing(spinValue, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        })
-      ).start();
-    }
-  }, [loading]);
-
-  async function fetchPokemonDetails() {
-    try {
-      setLoading(true);
-      const response = await fetch(
-        `https://pokeapi.co/api/v2/pokemon/${params.pokemon}`
-      );
-      const details = await response.json();
-
-      setPokemonDetail({
-        id: details.id,
-        name: details.name,
-        base_experience: details.base_experience,
-        height: details.height,
-        is_default: details.is_default,
-        order: details.order,
-        weight: details.weight,
-        abilities: details.abilities,
-        forms: details.forms,
-        game_indices: details.game_indices,
-        held_items: details.held_items,
-        location_area_encounters: details.location_area_encounters,
-        moves: details.moves,
-        image: details.sprites,
-        types: details.types,
-      });
-
-      setLastType(details.types[0].type.name);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  }
+  }, [pokemon]);
 
   if (loading) {
-    const spin = spinValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: ["0deg", "360deg"],
-    });
-
     return (
       <View style={styles.spinnerContainer}>
-        <Animated.View style={{ transform: [{ rotate: spin }] }}>
-          <View
-            style={[
-              styles.spinner,
-              {
-                borderTopColor: `${colorsByType[lastType]}`,
-              },
-            ]}
-          />
-        </Animated.View>
+        <View
+          style={[
+            styles.spinner,
+            {
+              borderTopColor:
+                colorsByType[pokemon?.types?.[0]?.type.name || "normal"],
+            },
+          ]}
+        />
       </View>
     );
   }
 
   return (
     <ScrollView style={styles.container}>
-      {pokemonDetail && (
-        <PokemonCard
-          style={styles.card}
-          type={pokemonDetail.types[0].type.name}
-        >
+      {pokemon && (
+        <PokemonCard style={styles.card} type={pokemon.types[0].type.name}>
           <Image
-            source={{ uri: pokemonDetail.image.front_default }}
+            source={{ uri: pokemon.image.front_default }}
             style={styles.image}
           />
         </PokemonCard>
+      )}
+      <View style={styles.tabContainer}>
+        {tabs.map((tab) => (
+          <Text
+            key={tab}
+            style={[activeTab === tab && styles.tabItemActive]}
+            onPress={() => setActiveTab(tab)}
+          >
+            {tab}
+          </Text>
+        ))}
+      </View>
+
+      {activeTab === "Forms" && pokemon && (
+        <View style={styles.tabContainer}>
+          <PokemonCard style={styles.card} type={pokemon.types[0].type.name}>
+            <Image
+              source={{ uri: pokemon.image.front_default }}
+              style={{ width: 100, height: 100 }}
+            />
+            <Text>Normal Form</Text>
+          </PokemonCard>
+
+          <PokemonCard style={styles.card} type={pokemon.types[0].type.name}>
+            <Image
+              source={{ uri: pokemon.image.front_shiny }}
+              style={{ width: 100, height: 100 }}
+            />
+            <Text>Shiny Form</Text>
+          </PokemonCard>
+        </View>
+      )}
+
+      {activeTab === "Details" && pokemon && (
+        <View style={styles.tabContainer}>
+          <Text>Height: {pokemon?.height / 10} m</Text>
+          <Text>Weight: {pokemon?.weight / 10} kg</Text>
+          <Text>Base Exp: {pokemon?.base_experience}</Text>
+        </View>
+      )}
+
+      {activeTab === "Moves" && (
+        <View style={styles.tabContainer}>
+          <Text>Fazer depois</Text>
+        </View>
+      )}
+
+      {activeTab === "Stats" && (
+        <View style={styles.tabContainer}>
+          <Text>Fazer depois</Text>
+        </View>
+      )}
+
+      {activeTab === "Weakness" && (
+        <View style={styles.tabContainer}>
+          <Text>Fraquezas baseadas no tipo principal…</Text>
+        </View>
       )}
     </ScrollView>
   );
@@ -150,11 +145,33 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 25,
     borderWidth: 4,
-    borderColor: "#ccc"
+    borderColor: "#ccc",
   },
   spinnerContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+
+  tabContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    paddingVertical: 12,
+    borderRadius: 20,
+    marginVertical: 15,
+  },
+
+  tabContainerv2: {
+    flexDirection: "column",
+    justifyContent: "space-around",
+    paddingVertical: 12,
+    borderRadius: 20,
+    marginVertical: 15,
+  },
+
+  tabItemActive: {
+    fontSize: 16,
+    borderBottomWidth: 2,
+    borderBottomColor: "#000",
   },
 });
