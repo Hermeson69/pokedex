@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Pokemon } from "../types/pokemonTypes";
 
 export function usePokemon(name: string | null) {

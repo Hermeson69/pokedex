@@ -59,14 +59,61 @@ npx expo start
 
 ```
 pokedex/
-├── app/
-│   ├── index.tsx          # Tela principal com listagem
-│   ├── details.tsx        # Tela de detalhes do Pokémon
-│   └── _layout.tsx        # Configuração de rotas
-├── assets/                # Imagens e recursos
-├── package.json           # Dependências
-├── tsconfig.json          # Configuração TypeScript
-└── README.md
+src/
+
+app/
+ ├── navigation/
+ │   ├── root.navigator.tsx
+ │   └── auth.navigator.tsx
+ │
+ ├── providers/
+ │   └── app.provider.tsx
+ │
+ └── theme/
+
+features/
+
+ ├── auth/
+ │   ├── screens/
+ │   ├── components/
+ │   ├── hooks/
+ │   ├── services/
+ │   ├── store/
+ │   └── types/
+ │
+ ├── profile/
+ ├── chat/
+ └── payments/
+
+shared/
+
+ ├── components/
+ │   ├── Button.tsx
+ │   ├── Input.tsx
+ │   └── Modal.tsx
+ │
+ ├── hooks/
+ ├── utils/
+ └── types/
+
+core/
+
+ ├── api/
+ │   ├── client.ts
+ │   └── interceptors.ts
+ │
+ ├── storage/
+ │   └── secureStorage.ts
+ │
+ ├── config/
+ │   └── env.ts
+ │
+ └── constants/
+
+assets/
+
+ ├── images/
+ └── fonts/
 ```
 
 ## 🛠️ Tecnologias Utilizadas

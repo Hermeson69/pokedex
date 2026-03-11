@@ -1,21 +1,20 @@
+import PokemonCard from "@/src/shared/components/pokemonCard";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   FlatList,
   Image,
-  Text,
-  View,
-  StyleSheet,
-  Pressable,
-  TextInput,
   Keyboard,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
   TouchableWithoutFeedback,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { Pokemon } from "../src/types/pokemonTypes";
-import PokemonCard from "@/src/components/pokemonCard";
-
+import { Pokemon } from "../shared/types/pokemonTypes";
 
 export default function Index() {
   const [pokemons, setpokemons] = useState<Pokemon[]>([]);
@@ -28,7 +27,7 @@ export default function Index() {
   async function fechPokemons() {
     try {
       const response = await fetch(
-        "https://pokeapi.co/api/v2/pokemon/?limit=50"
+        "https://pokeapi.co/api/v2/pokemon/?limit=50",
       );
       const data = await response.json();
 
@@ -43,7 +42,7 @@ export default function Index() {
             image: details.sprites,
             types: details.types,
           };
-        })
+        }),
       );
 
       setpokemons(datailedPokemons);
@@ -55,7 +54,7 @@ export default function Index() {
   const filteredPokemons = pokemons.filter(
     (pokemon) =>
       pokemon.name.toLowerCase().includes(search.toLowerCase()) ||
-      pokemon.id.toString().includes(search)
+      pokemon.id.toString().includes(search),
   );
 
   return (
@@ -159,14 +158,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginHorizontal: 10,
-    gap: 10,
   },
   searchInput: {
     padding: 10,
     backgroundColor: "#dddddd",
     margin: 10,
     borderRadius: 10,
-    width: 280,
+    width: 260,
   },
 
   button: {

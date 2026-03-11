@@ -1,16 +1,9 @@
+import PokemonCard from "@/src/shared/components/pokemonCard";
+import { usePokemon } from "@/src/shared/hooks/usePokemon";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Animated,
-} from "react-native";
-import PokemonCard from "@/src/components/pokemonCard";
-import { colorsByType } from "../src/types/types";
-import { usePokemon } from "@/src/hooks/usePokemon";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { colorsByType } from "@/src/shared/types/types";
 
 export default function Details() {
   const params = useLocalSearchParams();
