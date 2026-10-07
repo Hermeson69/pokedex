@@ -9,6 +9,7 @@ export default function RootLayout() {
         name="index"
         options={{ headerShown: false }}
       />
+      {/*teste no mac*/}
 
       <Stack.Screen
         name="details"
